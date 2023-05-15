@@ -40,7 +40,7 @@ function WebSocket:connect(url, path)
 		self._read = read
 		self._write = write
 		self._reconnect = nil
-		self:info('Connected to %s', url)
+		self:debug('Connected to %s', url)
 		local parent = self._parent
 		for message in self._read do
 			local payload, str = self:parseMessage(message)
@@ -50,7 +50,7 @@ function WebSocket:connect(url, path)
 				self:handlePayload(payload)
 			end
 		end
-		self:info('Disconnected')
+		self:debug('Disconnected')
 	else
 		self:error('Could not connect to %s (%s)', url, res) -- TODO: get new url?
 	end

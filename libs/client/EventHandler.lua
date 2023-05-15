@@ -104,7 +104,7 @@ function EventHandler.READY(d, client, shard)
 end
 
 function EventHandler.RESUMED(_, client, shard)
-	shard:info('Received RESUMED')
+	shard:debug('Received RESUMED')
 	return client:emit('shardResumed', shard._id)
 end
 

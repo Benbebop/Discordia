@@ -87,12 +87,12 @@ end
 function Shard:handleDisconnect(url, path)
 	self._client:emit('shardDisconnect', self._id)
 	if self._reconnect then
-		self:info('Reconnecting...')
+		self:debug('Reconnecting...')
 		return self:connect(url, path)
 	elseif self._reconnect == nil and self._client._options.autoReconnect then
 		local backoff = getReconnectTime(self, 0.9, 1.1)
 		incrementReconnectTime(self)
-		self:info('Reconnecting after %i ms...', backoff)
+		self:debug('Reconnecting after %i ms...', backoff)
 		sleep(backoff)
 		return self:connect(url, path)
 	end
@@ -126,7 +126,7 @@ function Shard:handlePayload(payload)
 
 	elseif op == RECONNECT then
 
-		self:info('Discord has requested a reconnection')
+		self:debug('Discord has requested a reconnection')
 		self:disconnect(true)
 
 	elseif op == INVALID_SESSION then
@@ -142,7 +142,7 @@ function Shard:handlePayload(payload)
 
 	elseif op == HELLO then
 
-		self:info('Received HELLO')
+		self:debug('Received HELLO')
 		self:startHeartbeat(d.heartbeat_interval)
 		if self._session_id then
 			self:resume()
