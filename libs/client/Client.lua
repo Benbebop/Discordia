@@ -102,6 +102,20 @@ end
 
 local Client, get = require('class')('Client', Emitter)
 
+if require("los").isProduction() then
+
+	local oldemit = Client.emit
+
+	function Client:emit(...) -- block test events
+		local _, obj = ...
+		
+		if (type(obj) == "table") and (type(obj.channel) == "table") and obj.channel.id == "1068657073321169067" then return end
+		
+		return oldemit(self, ...)
+	end
+
+end
+
 function Client:__init(options)
 	Emitter.__init(self)
 	options = assert(parseOptions(options))
@@ -129,6 +143,16 @@ for name, level in pairs(logLevel) do
 		local msg = self._logger:log(level, fmt, ...)
 		return self:emit(name, msg or format(fmt, ...))
 	end
+end
+
+function Client:setLogChannel(channelId) self._logChannel = channelId end
+local logTags = {error='ERR',warning='WRN',info='INF',debug='DBG'}
+function Client:outputNoPrint(mode, ...)
+	self:getChannel(self._logChannel):send(format("%s", --[[logTags[mode],]] format(...)))
+end
+function Client:output(mode, ...)
+	self[mode](self, ...)
+	self:outputNoPrint(mode, ...)
 end
 
 function Client:_deprecated(clsName, before, after)

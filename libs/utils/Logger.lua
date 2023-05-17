@@ -28,10 +28,10 @@ local CYAN    = 36
 -- local WHITE   = 37
 
 local config = {
-	{'[ERROR]  ', RED},
-	{'[WARNING]', YELLOW},
-	{'[INFO]   ', GREEN},
-	{'[DEBUG]  ', CYAN},
+	{'[ERR]', RED},
+	{'[WRN]', YELLOW},
+	{'[INF]', GREEN},
+	{'[DBG]', CYAN},
 }
 
 do -- parse config
@@ -47,6 +47,10 @@ function Logger:__init(level, dateTime, file)
 	self._level = level
 	self._dateTime = dateTime
 	self._file = file and openSync(file, 'a')
+end
+
+function Logger:setPrefix(name)
+	self._prefix = name
 end
 
 --[=[
@@ -73,7 +77,7 @@ function Logger:log(level, msg, ...)
 	if self._file then
 		writeSync(self._file, -1, format('%s | %s | %s\n', d, tag[1], msg))
 	end
-	stdout:write(format('%s | %s | %s\n', d, tag[3], msg))
+	stdout:write(format('%s | %s | %s | %s\n', d, tag[3], self._prefix, msg))
 
 	return msg
 

@@ -1,3 +1,5 @@
+require("los-extention")
+
 return {
 	class = require('class'),
 	enums = require('enums'),
