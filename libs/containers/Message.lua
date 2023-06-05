@@ -296,6 +296,16 @@ function Message:unpin()
 	end
 end
 
+function Message:publish()
+	local data, err = self.client._api:request("POST", ("/channels/%s/messages/%s/crosspost"):format(self.channel.id, self.id))
+	if data then
+		--TODO: modify flags
+		return true
+	else
+		return false, err
+	end
+end
+
 --[=[
 @m addReaction
 @t http
