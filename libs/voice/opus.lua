@@ -1,8 +1,11 @@
 local ffi = require('ffi')
 
-local loaded, lib = pcall(ffi.load, 'opus')
+local loaded, lib = pcall(ffi.load, 'bin/opus')
 if not loaded then
-	return nil, lib
+	loaded, lib = pcall(ffi.load, 'opus')
+	if not loaded then
+		return nil, lib
+	end
 end
 
 local new, typeof, gc = ffi.new, ffi.typeof, ffi.gc
