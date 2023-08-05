@@ -1,11 +1,8 @@
 local ffi = require('ffi')
 
-local loaded, lib = pcall(ffi.load, 'bin/sodium')
+local loaded, lib = pcall(ffi.load, 'sodium')
 if not loaded then
-	loaded, lib = pcall(ffi.load, 'sodium')
-	if not loaded then
-		return nil, lib
-	end
+	return nil, lib
 end
 
 local typeof = ffi.typeof
